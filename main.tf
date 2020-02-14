@@ -24,10 +24,6 @@ resource "azurerm_subnet" "subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = azurerm_resource_group.myresourcegroup.name
   address_prefix       = var.subnet_prefix
-    tags = {
-    Billable        = var.is_billable
-    Department       = var.department
-  }
   }
 
 resource "azurerm_network_security_group" "catapp-sg" {
