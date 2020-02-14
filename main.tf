@@ -1,6 +1,11 @@
 resource "azurerm_resource_group" "myresourcegroup" {
   name     = "${var.prefix}-workshop"
   location = var.location
+
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -8,14 +13,22 @@ resource "azurerm_virtual_network" "vnet" {
   location            = azurerm_resource_group.myresourcegroup.location
   address_space       = [var.address_space]
   resource_group_name = azurerm_resource_group.myresourcegroup.name
-}
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
+  }
 
 resource "azurerm_subnet" "subnet" {
   name                 = "${var.prefix}-subnet"
   virtual_network_name = azurerm_virtual_network.vnet.name
   resource_group_name  = azurerm_resource_group.myresourcegroup.name
   address_prefix       = var.subnet_prefix
-}
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
+  }
 
 resource "azurerm_network_security_group" "catapp-sg" {
   name                = "${var.prefix}-sg"
@@ -57,7 +70,11 @@ resource "azurerm_network_security_group" "catapp-sg" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
-}
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
+  }
 
 resource "azurerm_network_interface" "catapp-nic" {
   name                      = "${var.prefix}-catapp-nic"
@@ -71,7 +88,11 @@ resource "azurerm_network_interface" "catapp-nic" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.catapp-pip.id
   }
-}
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
+  }
 
 resource "azurerm_public_ip" "catapp-pip" {
   name                = "${var.prefix}-ip"
@@ -79,7 +100,11 @@ resource "azurerm_public_ip" "catapp-pip" {
   resource_group_name = azurerm_resource_group.myresourcegroup.name
   allocation_method   = "Dynamic"
   domain_name_label   = "${var.prefix}-meow"
-}
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
+  }
 
 resource "azurerm_virtual_machine" "catapp" {
   name                = "${var.prefix}-meow"
@@ -113,7 +138,11 @@ resource "azurerm_virtual_machine" "catapp" {
   os_profile_linux_config {
     disable_password_authentication = false
   }
-}
+    tags = {
+    Billable        = var.is_billable
+    Department       = var.department
+  }
+  }
 
 # We're using a little trick here so we can run the provisioner without
 # destroying the VM. Do not do this in production.
